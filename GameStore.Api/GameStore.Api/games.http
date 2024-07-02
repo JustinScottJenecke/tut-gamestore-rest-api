@@ -5,3 +5,14 @@ GET http://localhost:5243/game
 
 ###
 GET http://localhost:5243/game/3
+
+###
+POST http://localhost:5243/game
+Content-Type: application/json
+
+{
+    "name" : "Bloodborne",
+    "genre" : "Action-RPG",
+    "price" : "599.99",
+    "releaseDate" : "2015-03-24"
+}
