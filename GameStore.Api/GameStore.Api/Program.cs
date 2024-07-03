@@ -27,7 +27,12 @@ app.MapGet("/", () => "API: \n"
 app.MapGet("/game", () => gameDatastore);
 
 // GET - Read by id
-app.MapGet("/game/{id}", (int id) => gameDatastore.Find(game => game.Id == id) )
+app.MapGet("/game/{id}", (int id) => {
+
+        GameDto ? readGame = gameDatastore.Find(game => game.Id == id);
+
+        return readGame is null ? Results.NotFound() : Results.Ok(readGame);
+    })
     .WithName(GET_GAME_ENDPOINT_NAME);
 
 // POST - Create

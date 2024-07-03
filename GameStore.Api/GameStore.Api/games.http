@@ -4,7 +4,7 @@
 GET http://localhost:5243/game
 
 ###
-GET http://localhost:5243/game/3
+GET http://localhost:5243/game/1
 
 ###
 POST http://localhost:5243/game
@@ -29,4 +29,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5243/game/3
+DELETE http://localhost:5243/game/1
