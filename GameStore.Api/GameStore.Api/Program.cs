@@ -58,6 +58,9 @@ app.MapPut("/game/{id}", (int id, UpdateGameDto updatedGame) => {
     // filters games and returns index if id exists
     var index = gameDatastore.FindIndex(game => game.Id == id);
 
+    if( index == -1)
+        return Results.NotFound();
+
     // create new game record
     gameDatastore[index] = new GameDto(
         id,
@@ -73,9 +76,9 @@ app.MapPut("/game/{id}", (int id, UpdateGameDto updatedGame) => {
 // DELETE - Delete by ID
 app.MapDelete("/game/{id}", (int id) => 
 {
-    gameDatastore.RemoveAll(game => game.Id == id);
+    var deleted = gameDatastore.RemoveAll(game => game.Id == id);
 
-    return Results.Accepted();
+    return deleted >= 1 ? Results.Accepted() : Results.NotFound();
 });
 
 app.Run();
