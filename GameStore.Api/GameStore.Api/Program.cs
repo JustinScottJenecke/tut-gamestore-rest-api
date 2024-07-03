@@ -19,7 +19,8 @@ app.MapGet("/", () => "API: \n"
     + "---------------------------- \n"
     + "GET - '/game' - Read all games \n"
     + "GET - '/game/id' - Read game by id \n"
-    + "POST - '/game' - Create new game"
+    + "POST - '/game' - Create new game \n"
+    + "PUT - '/game/id' - Update game by id \n"
 );
 
 // GET - Read Games
@@ -43,6 +44,24 @@ app.MapPost("/game", ( CreateGameDto newGame ) => {
     gameDatastore.Add(game);
 
     return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new {id = game.Id}, game);
+});
+
+// PUT - Update
+app.MapPut("/game/{id}", (int id, UpdateGameDto updatedGame) => {
+    
+    // filters games and returns index if id exists
+    var index = gameDatastore.FindIndex(game => game.Id == id);
+
+    // create new game record
+    gameDatastore[index] = new GameDto(
+        id,
+        updatedGame.Name,
+        updatedGame.Genre, 
+        updatedGame.Price,
+        updatedGame.ReleaseDate
+    );
+
+    return Results.NoContent();
 });
 
 app.Run();
