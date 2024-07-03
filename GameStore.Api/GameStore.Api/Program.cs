@@ -21,6 +21,7 @@ app.MapGet("/", () => "API: \n"
     + "GET - '/game/id' - Read game by id \n"
     + "POST - '/game' - Create new game \n"
     + "PUT - '/game/id' - Update game by id \n"
+    + "DELETE - '/game/id' - Delete game by id \n"
 );
 
 // GET - Read Games
@@ -69,6 +70,7 @@ app.MapPut("/game/{id}", (int id, UpdateGameDto updatedGame) => {
     return Results.NoContent();
 });
 
+// DELETE - Delete by ID
 app.MapDelete("/game/{id}", (int id) => 
 {
     gameDatastore.RemoveAll(game => game.Id == id);
