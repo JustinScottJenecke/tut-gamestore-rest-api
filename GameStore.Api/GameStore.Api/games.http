@@ -16,3 +16,14 @@ Content-Type: application/json
     "price" : "599.99",
     "releaseDate" : "2015-03-24"
 }
+
+###
+PUT http://localhost:5243/game/1
+Content-Type: application/json
+
+{
+    "name" : "Street Fighter VI",
+    "genre" : "Fighting",
+    "price" : "899.99",
+    "releaseDate" : "2023-06-02"
+}
