@@ -14,8 +14,20 @@ List<GameDto> gameDatastore = [
 ];
 
 // Base Endpoint
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "API: \n"
+    + "Method - 'Uri' - Functionality \n"
+    + "---------------------------- \n"
+    + "GET - '/game' - Read all games \n"
+    + "GET - '/game/id' - Read game by id \n"
+    + "POST - '/game' - Create new game"
+);
 
+// GET - Read Games
+app.MapGet("/game", () => gameDatastore);
+
+// GET - Read by id
+app.MapGet("/game/{id}", (int id) => gameDatastore.Find(game => game.Id == id) )
+    .WithName(GET_GAME_ENDPOINT_NAME);
 
 // POST - Create
 app.MapPost("/game", ( CreateGameDto newGame ) => {
@@ -32,13 +44,5 @@ app.MapPost("/game", ( CreateGameDto newGame ) => {
 
     return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new {id = game.Id}, game);
 });
-
-// GET - Read Games
-app.MapGet("/game", () => gameDatastore);
-
-// GET - Read by id
-app.MapGet("/game/{id}", (int id) => gameDatastore.Find(game => game.Id == id) )
-    .WithName(GET_GAME_ENDPOINT_NAME);
-
 
 app.Run();
