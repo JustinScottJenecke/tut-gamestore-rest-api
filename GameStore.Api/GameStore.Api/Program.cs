@@ -1,5 +1,5 @@
 using GameStore.Api.Dto;
-using GameStore.Api.Endpoints;
+using GameStore.Api.Endpoint;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
