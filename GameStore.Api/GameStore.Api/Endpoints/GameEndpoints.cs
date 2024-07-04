@@ -7,6 +7,7 @@ public static class GameEndpoints
 
     // constant name for get single game
     const string GET_GAME_ENDPOINT_NAME = "GetGameById";
+    
 
     // in memory datastore
     private static readonly List<GameDto> gameDatastore = [
@@ -15,24 +16,15 @@ public static class GameEndpoints
         new GameDto(3, "FIFA17", "Sport", 899.99M, new DateOnly(2016, 8, 13))
     ];
 
-    public static WebApplication MapGamesEndpoints(this WebApplication app)
+    public static RouteGroupBuilder MapGamesEndpoints(this WebApplication app)
     {
-        // Base Endpoint
-        app.MapGet("/", () => "API: \n"
-            + "Method - 'Uri' - Functionality \n"
-            + "---------------------------- \n"
-            + "GET - '/game' - Read all games \n"
-            + "GET - '/game/id' - Read game by id \n"
-            + "POST - '/game' - Create new game \n"
-            + "PUT - '/game/id' - Update game by id \n"
-            + "DELETE - '/game/id' - Delete game by id \n"
-        );
+        var endpointGroup = app.MapGroup("/game");
 
         // GET - Read Games
-        app.MapGet("/game", () => gameDatastore);
+        endpointGroup.MapGet("/", () => gameDatastore);
 
         // GET - Read by id
-        app.MapGet("/game/{id}", (int id) =>
+        endpointGroup.MapGet("/{id}", (int id) =>
         {
             GameDto? readGame = gameDatastore.Find(game => game.Id == id);
 
@@ -41,7 +33,7 @@ public static class GameEndpoints
             .WithName(GET_GAME_ENDPOINT_NAME);
 
         // POST - Create
-        app.MapPost("/game", (CreateGameDto newGame) =>
+        endpointGroup.MapPost("/", (CreateGameDto newGame) =>
         {
             GameDto game = new(
                 gameDatastore.Count + 1,
@@ -57,7 +49,7 @@ public static class GameEndpoints
         });
 
         // PUT - Update
-        app.MapPut("/game/{id}", (int id, UpdateGameDto updatedGame) =>
+        endpointGroup.MapPut("/{id}", (int id, UpdateGameDto updatedGame) =>
         {
             // filters games and returns index if id exists
             var index = gameDatastore.FindIndex(game => game.Id == id);
@@ -78,14 +70,14 @@ public static class GameEndpoints
         });
 
         // DELETE - Delete by ID
-        app.MapDelete("/game/{id}", (int id) =>
+        endpointGroup.MapDelete("/{id}", (int id) =>
         {
             var deleted = gameDatastore.RemoveAll(game => game.Id == id);
 
             return deleted >= 1 ? Results.Accepted() : Results.NotFound();
         });
 
-        return app;
+        return endpointGroup;
     }
 
 }
