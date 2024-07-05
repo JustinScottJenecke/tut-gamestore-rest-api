@@ -19,6 +19,8 @@ app.MapGet("/", () => "API: \n"
     + "DELETE - '/game/id' - Delete game by id \n"
 );
 
+// create mappings for Game endpoints
 app.MapGamesEndpoints();
 
+// spin up application
 app.Run();
