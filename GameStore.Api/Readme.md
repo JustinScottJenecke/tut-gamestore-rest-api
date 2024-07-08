@@ -12,4 +12,5 @@
     <li>Minimal API app</li>
     <li>Entity Framework Migrations: mapping database tables from entities</li>
     <li>dotnet ef: cli tool to run/perform entity framework related tasks</li>
+    <li>Extension methods</li>
 </ul>

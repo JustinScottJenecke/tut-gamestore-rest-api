@@ -22,5 +22,8 @@ app.MapGet("/", () => "API: \n"
 // create mappings for Game endpoints
 app.MapGamesEndpoints();
 
+// Call extension method from DatabaseExtensions.cs
+app.MigrateDb();
+
 // spin up application
 app.Run();
