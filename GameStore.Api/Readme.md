@@ -15,6 +15,8 @@
 <ul>
     <li>Entity Framework Core</li>
     <li>Database Context</li>
+    <li>scope lifetime</li>
+    <li>service container</li>
     <li>SQLite</li>
     <li>DTO</li>
     <li>Entity Framework Migrations: mapping database tables from entities</li>
