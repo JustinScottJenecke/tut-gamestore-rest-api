@@ -1,6 +1,8 @@
 ﻿using GameStore.Api.Data;
 using GameStore.Api.Dto;
 using GameStore.Api.Entity;
+using GameStore.Api.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Api.Endpoint;
 
@@ -39,29 +41,37 @@ public static class GameEndpoints
         endpointGroup.MapPost("/", (CreateGameDto gameDto, GameStoreContext dbContext) =>
         {
             // Map CreateGameDto to Game Entity class
-            Game newGame = new Game() {
-                Name = gameDto.Name,
-                GenreId = gameDto.GenreId,
-                Genre = dbContext.Genres.Find(gameDto.GenreId),
-                Price = gameDto.Price,
-                ReleaseDate = gameDto.ReleaseDate  
-            };
+            // Game newGame = new Game() {
+            //     Name = gameDto.Name,
+            //     GenreId = gameDto.GenreId,
+            //     Genre = dbContext.Genres.Find(gameDto.GenreId),
+            //     Price = gameDto.Price,
+            //     ReleaseDate = gameDto.ReleaseDate  
+            // };
+
+            Game newGame = gameDto.MapToEntity();
+            newGame.Genre = dbContext.Genres.Find(gameDto.GenreId);
 
             // Add created game to Games DbSet
             dbContext.Games.Add(newGame);
             dbContext.SaveChanges();
 
             // transform game back into DTO since we never send internal models/entity to client. only Dto
-            GameDto returnedDto = new GameDto (
-                newGame.Id,
-                newGame.Name,
-                newGame.Genre!.Name,
-                newGame.Price,
-                newGame.ReleaseDate
-            );
+            // GameDto returnedDto = new GameDto (
+            //     newGame.Id,
+            //     newGame.Name,
+            //     newGame.Genre!.Name,
+            //     newGame.Price,
+            //     newGame.ReleaseDate
+            // );
+            
+            GameDto returnedDto = newGame.MapToGameDto();
 
             // return created Game as response to request
-            return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new {id = returnedDto.Id}, returnedDto);
+            // 1st arg - location property
+            // 2nd arg - path param value
+            // 3rd arg - request body
+            return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new {id = newGame.Id}, returnedDto);
 
         });
 
