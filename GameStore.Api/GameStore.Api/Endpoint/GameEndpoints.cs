@@ -44,7 +44,7 @@ public static class GameEndpoints
                 GenreId = gameDto.GenreId,
                 Genre = dbContext.Genres.Find(gameDto.GenreId),
                 Price = gameDto.Price,
-                ReleaseDate = gameDto.ReleaseDate
+                ReleaseDate = gameDto.ReleaseDate  
             };
 
             // Add created game to Games DbSet

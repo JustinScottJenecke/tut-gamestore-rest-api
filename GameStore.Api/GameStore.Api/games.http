@@ -11,8 +11,8 @@ POST http://localhost:5243/game
 Content-Type: application/json
 
 {
-    "name" : "Bloodborne dpghrtkhgorkhoktrophkokrojurktypjokrtjk6jofdohphrokdrokpohkr",
-    "genre" : "Action RPG",
+    "name" : "Bloodborne",
+    "genreId" : 5,
     "price" : "599.99",
     "releaseDate" : "2015-03-24"
 }
