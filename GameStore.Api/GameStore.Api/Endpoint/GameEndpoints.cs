@@ -51,8 +51,17 @@ public static class GameEndpoints
             dbContext.Games.Add(newGame);
             dbContext.SaveChanges();
 
+            // transform game back into DTO since we never send internal models/entity to client. only Dto
+            GameDto returnedDto = new GameDto (
+                newGame.Id,
+                newGame.Name,
+                newGame.Genre!.Name,
+                newGame.Price,
+                newGame.ReleaseDate
+            );
+
             // return created Game as response to request
-            return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new { id = newGame.Id }, newGame);
+            return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new {id = returnedDto.Id}, returnedDto);
 
         });
 

@@ -11,10 +11,10 @@ POST http://localhost:5243/game
 Content-Type: application/json
 
 {
-    "name" : "Bloodborne",
-    "genreId" : 5,
-    "price" : "599.99",
-    "releaseDate" : "2015-03-24"
+    "name" : "SF2",
+    "genreId" : 1,
+    "price" : "199.99",
+    "releaseDate" : "1992-07-15"
 }
 
 ###
