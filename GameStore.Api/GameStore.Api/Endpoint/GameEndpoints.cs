@@ -29,9 +29,10 @@ public static class GameEndpoints
         endpointGroup.MapGet("/", () => gameDatastore);
 
         // GET - Read by id
-        endpointGroup.MapGet("/{id}", (int id) =>
+        endpointGroup.MapGet("/{id}", (int id, GameStoreContext dbContext) =>
         {
-            GameDto? readGame = gameDatastore.Find(game => game.Id == id);
+            //GameDto? readGame = gameDatastore.Find(game => game.Id == id);
+            Game? readGame = dbContext.Games.Find(id); // find game by id inside database
 
             return readGame is null ? Results.NotFound() : Results.Ok(readGame);
         })
