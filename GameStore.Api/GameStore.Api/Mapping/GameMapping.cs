@@ -9,10 +9,22 @@ public static class GameMapping
     {
         return new Game() 
         {
-                Name = gameDto.Name,
-                GenreId = gameDto.GenreId,
-                Price = gameDto.Price,
-                ReleaseDate = gameDto.ReleaseDate  
+            Name = gameDto.Name,
+            GenreId = gameDto.GenreId,
+            Price = gameDto.Price,
+            ReleaseDate = gameDto.ReleaseDate  
+        };
+    }
+
+        public static Game MapToEntity(this UpdateGameDto gameDto, int providedId) 
+    {
+        return new Game() 
+        {
+            Id = providedId,
+            Name = gameDto.Name,
+            GenreId = gameDto.GenreId,
+            Price = gameDto.Price,
+            ReleaseDate = gameDto.ReleaseDate  
         };
     }
 
@@ -27,7 +39,7 @@ public static class GameMapping
             );
     }
 
-        public static GameDetailsDto MapToGameDetailsDto(this Game gameEntity)
+    public static GameDetailsDto MapToGameDetailsDto(this Game gameEntity)
     {
         return new GameDetailsDto (
                 gameEntity.Id,

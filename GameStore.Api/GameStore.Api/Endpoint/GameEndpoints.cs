@@ -59,22 +59,27 @@ public static class GameEndpoints
         });
 
         // PUT - Update
-        endpointGroup.MapPut("/{id}", (int id, UpdateGameDto updatedGame) =>
+        endpointGroup.MapPut("/{id}", (int id, UpdateGameDto updatedGame, GameStoreContext dbContext) =>
         {
             // filters games and returns index if id exists
-            var index = gameDatastore.FindIndex(game => game.Id == id);
+            var existingGame = dbContext.Games.Find(id);
 
-            if (index == -1)
+            if (existingGame is null)
                 return Results.NotFound();
 
             // create new game record
-            gameDatastore[index] = new GameSummaryDto(
-                id,
-                updatedGame.Name,
-                updatedGame.Genre,
-                updatedGame.Price,
-                updatedGame.ReleaseDate
-            );
+            // gameDatastore[index] = new GameSummaryDto(
+            //     id,
+            //     updatedGame.Name,
+            //     updatedGame.Genre,
+            //     updatedGame.Price,
+            //     updatedGame.ReleaseDate
+            // );
+
+            // update values directly in database using setValues() and UpdateGameDto 
+            dbContext.Entry(existingGame).CurrentValues.SetValues(updatedGame.MapToEntity(id));
+
+            dbContext.SaveChanges();
 
             return Results.NoContent();
         });

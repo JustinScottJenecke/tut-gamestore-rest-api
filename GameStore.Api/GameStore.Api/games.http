@@ -4,7 +4,7 @@
 GET http://localhost:5243/game
 
 ###
-GET http://localhost:5243/game/1
+GET http://localhost:5243/game/4
 
 ###
 POST http://localhost:5243/game
@@ -18,14 +18,14 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5243/game/1
+PUT http://localhost:5243/game/4
 Content-Type: application/json
 
 {
-    "name" : "Street Fighter VI",
-    "genre" : "Fighting",
-    "price" : "1099.99",
-    "releaseDate" : "2023-06-02"
+    "name" : "Street Fighter 2: Champion Edition",
+    "genreId" : 1,
+    "price" : "299.99",
+    "releaseDate" : "1994-06-02"
 }
 
 ###
