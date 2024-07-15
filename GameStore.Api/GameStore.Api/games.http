@@ -11,10 +11,10 @@ POST http://localhost:5243/game
 Content-Type: application/json
 
 {
-    "name" : "SF2",
+    "name" : "SF6",
     "genreId" : 1,
-    "price" : "199.99",
-    "releaseDate" : "1992-07-15"
+    "price" : "999.99",
+    "releaseDate" : "2024-07-15"
 }
 
 ###

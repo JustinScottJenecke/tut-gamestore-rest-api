@@ -7,4 +7,4 @@ public record class GameDetailsDto
     int GenreId,
     decimal Price,
     DateOnly ReleaseDate
-)
+);

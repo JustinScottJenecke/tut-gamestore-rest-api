@@ -31,21 +31,16 @@ public static class GameEndpoints
         // GET - Read by id
         endpointGroup.MapGet("/{id}", (int id, GameStoreContext dbContext) =>
         {
-            //GameDto? readGame = gameDatastore.Find(game => game.Id == id);
             Game? readGame = dbContext.Games.Find(id); // find game by id inside database
 
-            return readGame is null ? Results.NotFound() : Results.Ok(readGame);
+            return readGame is null ? Results.NotFound() : Results.Ok(readGame.MapToGameDetailsDto());
         })
-            .WithName(GET_GAME_ENDPOINT_NAME);
+        .WithName(GET_GAME_ENDPOINT_NAME);
 
         // POST - Create
         endpointGroup.MapPost("/", (CreateGameDto gameDto, GameStoreContext dbContext) =>
         {
-            // Map CreateGameDto to Game Entity class
-            // Game newGame = new Game() {
-            //     Name = gameDto.Name, GenreId = gameDto.GenreId, Genre = dbContext.Genres.Find(gameDto.GenreId), Price = gameDto.Price, ReleaseDate = gameDto.ReleaseDate  
-            // };
-
+            // map incoming dto to game entity object
             Game newGame = gameDto.MapToEntity();
 
             // can be removed since ef knows that genreid is foreign key and can connect tables for us
@@ -55,19 +50,12 @@ public static class GameEndpoints
             dbContext.Games.Add(newGame);
             dbContext.SaveChanges();
 
-            // transform game back into DTO since we never send internal models/entity to client. only Dto
-            // GameDto returnedDto = new GameDto (
-            //     newGame.Id, newGame.Name, newGame.Genre!.Name, newGame.Price, newGame.ReleaseDate
-            // );
-            
+            // transform game back into DTO since we never send internal models/entity to client. only Dto           
             GameDetailsDto returnedDto = newGame.MapToGameDetailsDto();
 
             // return created Game as response to request
-            // 1st arg - location property
-            // 2nd arg - path param value
-            // 3rd arg - request body
+            // 1st arg - location property | 2nd arg - path param value | 3rd arg - request body
             return Results.CreatedAtRoute(GET_GAME_ENDPOINT_NAME, new {id = newGame.Id}, returnedDto);
-
         });
 
         // PUT - Update
