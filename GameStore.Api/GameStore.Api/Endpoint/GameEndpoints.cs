@@ -26,7 +26,12 @@ public static class GameEndpoints
             .WithParameterValidation();
 
         // GET - Read Games
-        endpointGroup.MapGet("/", () => gameDatastore);
+        endpointGroup.MapGet("/", (GameStoreContext dbContext) => {
+            return dbContext.Games
+                .Include(game => game.Genre)
+                .Select(game => game.MapToGameSummaryDto())
+                .AsNoTracking();
+        });
 
         // GET - Read by id
         endpointGroup.MapGet("/{id}", (int id, GameStoreContext dbContext) =>
