@@ -16,9 +16,9 @@ public static class GameMapping
         };
     }
 
-    public static GameDto MapToGameDto(this Game gameEntity)
+    public static GameSummaryDto MapToGameSummaryDto(this Game gameEntity)
     {
-        return new GameDto (
+        return new GameSummaryDto (
                 gameEntity.Id,
                 gameEntity.Name,
                 gameEntity.Genre!.Name,

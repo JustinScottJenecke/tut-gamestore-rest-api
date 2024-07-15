@@ -66,7 +66,7 @@ public static class GameEndpoints
             //     newGame.ReleaseDate
             // );
             
-            GameDto returnedDto = newGame.MapToGameDto();
+            GameSummaryDto returnedDto = newGame.MapToGameDto();
 
             // return created Game as response to request
             // 1st arg - location property
