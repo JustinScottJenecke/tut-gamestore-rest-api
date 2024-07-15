@@ -26,4 +26,15 @@ public static class GameMapping
                 gameEntity.ReleaseDate
             );
     }
+
+        public static GameDetailsDto MapToGameDetailsDto(this Game gameEntity)
+    {
+        return new GameDetailsDto (
+                gameEntity.Id,
+                gameEntity.Name,
+                gameEntity.GenreId,
+                gameEntity.Price,
+                gameEntity.ReleaseDate
+            );
+    }
 }

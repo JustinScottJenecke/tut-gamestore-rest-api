@@ -14,10 +14,10 @@ public static class GameEndpoints
     
 
     // in memory datastore
-    private static readonly List<GameDto> gameDatastore = [
-        new GameDto(1, "SF2", "Fighting", 199.99M, new DateOnly(1992, 7, 15)),
-        new GameDto(2, "FFXIV", "RPG", 699.99M, new DateOnly(2010, 9, 30)),
-        new GameDto(3, "FIFA17", "Sport", 899.99M, new DateOnly(2016, 8, 13))
+    private static readonly List<GameSummaryDto> gameDatastore = [
+        new (1, "SF2", "Fighting", 199.99M, new DateOnly(1992, 7, 15)),
+        new (2, "FFXIV", "RPG", 699.99M, new DateOnly(2010, 9, 30)),
+        new (3, "FIFA17", "Sport", 899.99M, new DateOnly(2016, 8, 13))
     ];
 
     public static RouteGroupBuilder MapGamesEndpoints(this WebApplication app)
@@ -43,15 +43,13 @@ public static class GameEndpoints
         {
             // Map CreateGameDto to Game Entity class
             // Game newGame = new Game() {
-            //     Name = gameDto.Name,
-            //     GenreId = gameDto.GenreId,
-            //     Genre = dbContext.Genres.Find(gameDto.GenreId),
-            //     Price = gameDto.Price,
-            //     ReleaseDate = gameDto.ReleaseDate  
+            //     Name = gameDto.Name, GenreId = gameDto.GenreId, Genre = dbContext.Genres.Find(gameDto.GenreId), Price = gameDto.Price, ReleaseDate = gameDto.ReleaseDate  
             // };
 
             Game newGame = gameDto.MapToEntity();
-            newGame.Genre = dbContext.Genres.Find(gameDto.GenreId);
+
+            // can be removed since ef knows that genreid is foreign key and can connect tables for us
+            // newGame.Genre = dbContext.Genres.Find(gameDto.GenreId);
 
             // Add created game to Games DbSet
             dbContext.Games.Add(newGame);
@@ -59,14 +57,10 @@ public static class GameEndpoints
 
             // transform game back into DTO since we never send internal models/entity to client. only Dto
             // GameDto returnedDto = new GameDto (
-            //     newGame.Id,
-            //     newGame.Name,
-            //     newGame.Genre!.Name,
-            //     newGame.Price,
-            //     newGame.ReleaseDate
+            //     newGame.Id, newGame.Name, newGame.Genre!.Name, newGame.Price, newGame.ReleaseDate
             // );
             
-            GameSummaryDto returnedDto = newGame.MapToGameDto();
+            GameDetailsDto returnedDto = newGame.MapToGameDetailsDto();
 
             // return created Game as response to request
             // 1st arg - location property
@@ -86,7 +80,7 @@ public static class GameEndpoints
                 return Results.NotFound();
 
             // create new game record
-            gameDatastore[index] = new GameDto(
+            gameDatastore[index] = new GameSummaryDto(
                 id,
                 updatedGame.Name,
                 updatedGame.Genre,
