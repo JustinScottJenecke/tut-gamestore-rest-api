@@ -23,7 +23,7 @@ app.MapGet("/", () => "API: \n"
 app.MapGamesEndpoints();
 
 // Call extension method from DatabaseExtensions.cs
-app.MigrateDb();
+await app.MigrateDbAsync();
 
 // spin up application
 app.Run();

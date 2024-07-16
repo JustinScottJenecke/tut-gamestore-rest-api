@@ -26,24 +26,26 @@ public static class GameEndpoints
             .WithParameterValidation();
 
         // GET - Read Games
-        endpointGroup.MapGet("/", (GameStoreContext dbContext) => {
-            return dbContext.Games
+        endpointGroup.MapGet("/", async (GameStoreContext dbContext) => 
+        {
+            return await dbContext.Games
                 .Include(game => game.Genre)
                 .Select(game => game.MapToGameSummaryDto())
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         });
 
         // GET - Read by id
-        endpointGroup.MapGet("/{id}", (int id, GameStoreContext dbContext) =>
+        endpointGroup.MapGet("/{id}", async (int id, GameStoreContext dbContext) =>
         {
-            Game? readGame = dbContext.Games.Find(id); // find game by id inside database
+            Game? readGame = await dbContext.Games.FindAsync(id); // find game by id inside database
 
             return readGame is null ? Results.NotFound() : Results.Ok(readGame.MapToGameDetailsDto());
         })
         .WithName(GET_GAME_ENDPOINT_NAME);
 
         // POST - Create
-        endpointGroup.MapPost("/", (CreateGameDto gameDto, GameStoreContext dbContext) =>
+        endpointGroup.MapPost("/", async (CreateGameDto gameDto, GameStoreContext dbContext) =>
         {
             // map incoming dto to game entity object
             Game newGame = gameDto.MapToEntity();
@@ -53,7 +55,7 @@ public static class GameEndpoints
 
             // Add created game to Games DbSet
             dbContext.Games.Add(newGame);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             // transform game back into DTO since we never send internal models/entity to client. only Dto           
             GameDetailsDto returnedDto = newGame.MapToGameDetailsDto();
@@ -64,10 +66,10 @@ public static class GameEndpoints
         });
 
         // PUT - Update
-        endpointGroup.MapPut("/{id}", (int id, UpdateGameDto updatedGame, GameStoreContext dbContext) =>
+        endpointGroup.MapPut("/{id}", async (int id, UpdateGameDto updatedGame, GameStoreContext dbContext) =>
         {
             // filters games and returns index if id exists
-            var existingGame = dbContext.Games.Find(id);
+            var existingGame = await dbContext.Games.FindAsync(id);
 
             if (existingGame is null)
                 return Results.NotFound();
@@ -84,17 +86,17 @@ public static class GameEndpoints
             // update values directly in database using setValues() and UpdateGameDto 
             dbContext.Entry(existingGame).CurrentValues.SetValues(updatedGame.MapToEntity(id));
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return Results.NoContent();
         });
 
         // DELETE - Delete by ID
-        endpointGroup.MapDelete("/{id}", (int id, GameStoreContext dbContext) =>
+        endpointGroup.MapDelete("/{id}", async (int id, GameStoreContext dbContext) =>
         {
             //var deleted = gameDatastore.RemoveAll(game => game.Id == id);
-            dbContext.Games.Where(game => game.Id == id)
-                .ExecuteDelete();
+            await dbContext.Games.Where(game => game.Id == id)
+                .ExecuteDeleteAsync();
 
             // return deleted >= 1 ? Results.Accepted() : Results.NotFound();
             return Results.NoContent();
