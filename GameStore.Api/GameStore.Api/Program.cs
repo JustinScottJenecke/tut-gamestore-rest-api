@@ -19,8 +19,9 @@ app.MapGet("/", () => "API: \n"
     + "DELETE - '/game/id' - Delete game by id \n"
 );
 
-// create mappings for Game endpoints
+// create mappings for Game & Genre endpoints
 app.MapGamesEndpoints();
+app.MapGenreEndpoints();
 
 // Call extension method from DatabaseExtensions.cs
 await app.MigrateDbAsync();
