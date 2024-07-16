@@ -22,11 +22,11 @@ PUT http://localhost:5243/game/4
 Content-Type: application/json
 
 {
-    "name" : "Street Fighter 2: Champion Edition",
+    "name" : "Street Fighter 5: Champion Edition",
     "genreId" : 1,
-    "price" : "299.99",
+    "price" : "399.99",
     "releaseDate" : "1994-06-02"
 }
 
 ###
-DELETE http://localhost:5243/game/5
+DELETE http://localhost:5243/game/7

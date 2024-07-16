@@ -90,11 +90,14 @@ public static class GameEndpoints
         });
 
         // DELETE - Delete by ID
-        endpointGroup.MapDelete("/{id}", (int id) =>
+        endpointGroup.MapDelete("/{id}", (int id, GameStoreContext dbContext) =>
         {
-            var deleted = gameDatastore.RemoveAll(game => game.Id == id);
+            //var deleted = gameDatastore.RemoveAll(game => game.Id == id);
+            dbContext.Games.Where(game => game.Id == id)
+                .ExecuteDelete();
 
-            return deleted >= 1 ? Results.Accepted() : Results.NotFound();
+            // return deleted >= 1 ? Results.Accepted() : Results.NotFound();
+            return Results.NoContent();
         });
 
         return endpointGroup;
